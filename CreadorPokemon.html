@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creador de Cartas de Pokémon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ---------- Página ---------- */
+        body {
+            min-height: 100vh;
+            padding: 24px 16px 48px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fff;
+            /* Fondo propio (sin depender de una imagen externa) */
+            background: radial-gradient(circle at 20% 0%, #3b2a7a 0%, transparent 55%),
+                        radial-gradient(circle at 90% 100%, #7a1f3d 0%, transparent 50%),
+                        #12122b;
+            background-attachment: fixed;
+        }
+
+        .creator {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 24px;
+            text-shadow: 2px 2px #000;
+        }
+
+        .layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* ---------- Formulario ---------- */
+        .form {
+            flex: 1 1 320px;
+            max-width: 420px;
+            padding: 20px;
+            background: rgba(10, 10, 30, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 1px 1px #000;
+        }
+
+        .form label {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .form input[type="text"],
+        .form input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 14px;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            background: #fff;
+            color: #111;
+            font-size: 15px;
+            text-shadow: none;
+        }
+
+        .form input[type="color"] {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .form input:focus {
+            outline: none;
+            border-color: #ffcb05;
+        }
+
+        .form input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #ffcb05;
+            color: #1a1a1a;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.15s, background 0.15s;
+        }
+
+        .form input[type="submit"]:hover {
+            background: #ffe066;
+            transform: translateY(-2px);
+        }
+
+        .vacio {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+            text-align: center;
+            max-width: 300px;
+            padding-top: 40px;
+        }
+
+        /* ---------- Carta ---------- */
+        .carta {
+            width: 320px;
+            padding: 12px;
+            border-radius: 15px;
+            border: 8px solid #fbc02d;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            color: #1a1a1a;
+        }
+
+        .encabezado {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .nombre-tipo,
+        .nombre-tipo2 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tipo-badge {
+            background: #b8d6d7;
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .nombre {
+            font-weight: bold;
+            font-size: 20px;
+            color: #111;
+        }
+
+        .PS {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .ps-number {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .imagen-contenedor {
+            background: rgba(255, 255, 255, 0.35);
+            border-radius: 8px;
+            padding: 4px;
+            border: 2px solid #f90606;
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .imagen-contenedor img {
+            width: 100%;
+            max-height: 240px;
+            object-fit: contain;
+        }
+
+        .encabezado3 {
+            padding: 10px 0;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .Habilidad {
+            padding: 2px 8px;
+            border-radius: 10px;
+            background-color: #8d2424;
+            font-size: 12px;
+            font-style: italic;
+            color: antiquewhite;
+        }
+
+        .Doble-Tipo {
+            font-size: 17px;
+            color: #6b1111;
+        }
+
+        .encabezado4 {
+            padding: 10px 0;
+        }
+
+        .Turboimpulso {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .textHabilidad {
+            line-height: 1.4;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .debilidades {
+            margin-top: 12px;
+            background: #81d2d4;
+            color: #151515;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .textHabilidad2 {
+            margin-top: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 400px) {
+            .carta { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="creator">Creador de Cartas de Pokémon</h1>
+
+    <div class="layout">
+        <form id="pokemon-form" class="form">
+            <label for="tipo-badge">Fase:</label>
+            <input type="text" id="tipo-badge" name="tipo-badge" placeholder="Ej: Básico" required>
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Ej: Charmander" required>
+
+            <label for="ps-number">Puntos de vida:</label>
+            <input type="text" id="ps-number" name="ps-number" placeholder="Ej: 60" required>
+
+            <label for="imagenPokemon">Imagen del pokémon:</label>
+            <input type="file" id="imagenPokemon" name="imagenPokemon" accept="image/*" required>
+
+            <label for="Habilidad">Habilidad:</label>
+            <input type="text" id="Habilidad" name="Habilidad" required>
+
+            <label for="DescripcionHabilidad">Descripción de la habilidad:</label>
+            <input type="text" id="DescripcionHabilidad" name="DescripcionHabilidad" required>
+
+            <label for="Habilidad2">Habilidad 2:</label>
+            <input type="text" id="Habilidad2" name="Habilidad2">
+
+            <label for="DescripcionHabilidad2">Descripción de la habilidad 2:</label>
+            <input type="text" id="DescripcionHabilidad2" name="DescripcionHabilidad2">
+
+            <label for="Debilidad">Debilidad:</label>
+            <input type="text" id="Debilidad" name="Debilidad">
+
+            <label for="Caracteristicas">Características:</label>
+            <input type="text" id="Caracteristicas" name="Caracteristicas">
+
+            <label for="color1">Color inicial del fondo de la carta:</label>
+            <input type="color" name="color1" id="color1" value="#f25602">
+
+            <label for="color2">Color final del fondo de la carta:</label>
+            <input type="color" name="color2" id="color2" value="#ffd93b">
+
+            <input type="submit" value="Crear carta">
+        </form>
+
+        <div id="pokemon-card-container">
+            <p class="vacio">Rellena el formulario y pulsa «Crear carta» para ver aquí tu carta.</p>
+        </div>
+    </div>
+
+    <script>
+        // Evita que el texto escrito se interprete como HTML
+        function esc(texto) {
+            const d = document.createElement('div');
+            d.textContent = texto;
+            return d.innerHTML;
+        }
+
+        document.getElementById('pokemon-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const tipo = esc(document.getElementById('tipo-badge').value);
+            const nombre = esc(document.getElementById('nombre').value);
+            const hp = esc(document.getElementById('ps-number').value);
+            const file = document.getElementById('imagenPokemon').files[0];
+            const habilidad = esc(document.getElementById('Habilidad').value);
+            const descripcionHabilidad = esc(document.getElementById('DescripcionHabilidad').value);
+            const habilidad2 = esc(document.getElementById('Habilidad2').value);
+            const descripcionHabilidad2 = esc(document.getElementById('DescripcionHabilidad2').value);
+            const debilidad = esc(document.getElementById('Debilidad').value);
+            const caracteristicas = esc(document.getElementById('Caracteristicas').value);
+            const color1 = document.getElementById('color1').value;
+            const color2 = document.getElementById('color2').value;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('pokemon-card-container').innerHTML = `
+                <div class="carta" style="background: linear-gradient(135deg, ${color1}, ${color2});">
+                    <div class="encabezado">
+                        <div class="nombre-tipo">
+                            <span class="tipo-badge">${tipo}</span>
+                            <span class="nombre">${nombre}</span>
+                        </div>
+                        <div class="nombre-tipo2">
+                            <div class="PS">PS</div>
+                            <div class="ps-number">${hp}</div>
+                        </div>
+                    </div>
+                    <div class="imagen-contenedor">
+                        <img src="${e.target.result}" alt="${nombre}">
+                    </div>
+
+                    <div class="encabezado3">
+                        <span class="Habilidad">Habilidad</span>
+                        <span class="Doble-Tipo"><strong>${habilidad}</strong></span>
+                    </div>
+                    <div class="textHabilidad">${descripcionHabilidad}</div>
+                    ${habilidad2 ? `
+                    <div class="encabezado4">
+                        <span class="Turboimpulso">${habilidad2}</span>
+                    </div>
+                    <div class="textHabilidad">${descripcionHabilidad2}</div>` : ''}
+                    ${debilidad ? `<div class="debilidades">Debilidad: ${debilidad}</div>` : ''}
+                    ${caracteristicas ? `<div class="textHabilidad2">${caracteristicas}</div>` : ''}
+                </div>`;
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>
